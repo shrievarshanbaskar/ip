@@ -6,18 +6,20 @@ public class Task {
         this.name = name;
         this.status = status;
     }
+
     public boolean getStatus() {
         return this.status;
     }
+
     public void setStatus(boolean status) {
         this.status = status;
     }
+
     @Override
     public String toString() {
-        if(status) {
-            return "[X] " + this.name;
+        if (status) {
+            return "[X] " + name;
         }
-        return "[ ] " + this.name;
+        return "[ ] " + name;
     }
-
 }
