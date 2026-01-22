@@ -80,6 +80,22 @@ public class Duke {
                     }
                     System.out.println("------------------------------------------------");
                 }
+                else if (input.startsWith("delete ")) {
+                    int index = Integer.parseInt(input.substring(7)) - 1;
+
+                    if (index < 0 || index >= list.size()) {
+                        throw new DukeException("That task number does not exist.");
+                    }
+
+                    Task removed = list.remove(index);
+
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println("  " + removed);
+                    System.out.println("Now you have " + list.size() + " tasks in the list.");
+                    System.out.println("-------------------------------------------------");
+                }
+
 
                 else {
                     throw new DukeException("I'm sorry, but I don't know what that means.");
