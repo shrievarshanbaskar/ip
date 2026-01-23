@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Duke {
+public class Fozza {
     public static void main(String[] args) {
 
         System.out.println("-------------------------------------------------");
@@ -23,7 +23,7 @@ public class Duke {
                 }
 
                 else if (input.equals("todo") || input.length() <= 5 && input.startsWith("todo")) {
-                    throw new DukeException("The description of a todo cannot be empty.");
+                    throw new FozzaException("The description of a todo cannot be empty.");
                 }
 
                 else if (input.startsWith("todo ")) {
@@ -40,7 +40,7 @@ public class Duke {
 
                 else if (input.startsWith("deadline ")) {
                     if (!input.contains(" /by ")) {
-                        throw new DukeException("A deadline must have a /by.");
+                        throw new FozzaException("A deadline must have a /by.");
                     }
 
                     String[] parts = input.substring(9).split(" /by ");
@@ -56,7 +56,7 @@ public class Duke {
 
                 else if (input.startsWith("event ")) {
                     if (!input.contains(" /from ") || !input.contains(" /to ")) {
-                        throw new DukeException("An event must have /from and /to.");
+                        throw new FozzaException("An event must have /from and /to.");
                     }
 
                     String[] first = input.substring(6).split(" /from ");
@@ -84,7 +84,7 @@ public class Duke {
                     int index = Integer.parseInt(input.substring(7)) - 1;
 
                     if (index < 0 || index >= list.size()) {
-                        throw new DukeException("That task number does not exist.");
+                        throw new FozzaException("That task number does not exist.");
                     }
 
                     Task removed = list.remove(index);
@@ -98,10 +98,10 @@ public class Duke {
 
 
                 else {
-                    throw new DukeException("I'm sorry, but I don't know what that means.");
+                    throw new FozzaException("I'm sorry, but I don't know what that means.");
                 }
 
-            } catch (DukeException e) {
+            } catch (FozzaException e) {
                 System.out.println("-------------------------------------------------");
                 System.out.println("OOPS!! " + e.getMessage());
                 System.out.println("-------------------------------------------------");
