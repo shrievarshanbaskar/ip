@@ -1,5 +1,4 @@
-todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-12-02 18:00
+event project meeting /from 2019-12-02 14:00 /to 2019-12-02 16:00
 list
 bye

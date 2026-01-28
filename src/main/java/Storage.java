@@ -22,7 +22,9 @@ public class Storage {
         String line;
 
         while ((line = reader.readLine()) != null) {
-            tasks.add(parseTask(line));
+            if (!line.trim().isEmpty()) {
+                tasks.add(parseTask(line));
+            }
         }
 
         reader.close();
