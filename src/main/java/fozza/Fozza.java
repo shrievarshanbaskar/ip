@@ -1,6 +1,10 @@
 package fozza;
 
 import java.io.IOException;
+/**
+ * Main entry point of the Fozza chatbot application.
+ * Handles program startup and the main event loop.
+ */
 
 public class Fozza {
     private final Storage storage;
@@ -20,6 +24,10 @@ public class Fozza {
         }
         this.tasks = loaded;
     }
+    /**
+     * Runs the main command-processing loop of the chatbot.
+     * Reads user input, parses commands, and executes actions.
+     */
 
     public void run() {
         ui.showWelcome();

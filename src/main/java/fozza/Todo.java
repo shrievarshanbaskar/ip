@@ -1,4 +1,7 @@
 package fozza;
+/**
+ * Represents a simple todo task without dates.
+ */
 
 public class Todo extends Task {
 

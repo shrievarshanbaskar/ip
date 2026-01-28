@@ -1,4 +1,7 @@
 package fozza;
+/**
+ * Abstract base class representing a task in the task list.
+ */
 
 public abstract class Task {
     protected String name;
@@ -18,6 +21,9 @@ public abstract class Task {
         this.status = status;
     }
 
+    /**
+     * Returns the string representation of the task for display.
+     */
     @Override
     public String toString() {
         if (status) {

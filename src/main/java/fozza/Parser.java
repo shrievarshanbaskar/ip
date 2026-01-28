@@ -1,6 +1,17 @@
 package fozza;
+/**
+ * Parses raw user input strings into structured commands.
+ */
 
 public class Parser {
+
+    /**
+     * Parses a user command string and returns a ParsedCommand.
+     *
+     * @param input Full user input line
+     * @return ParsedCommand representing the command
+     * @throws FozzaException if the command format is invalid
+     */
 
     public static ParsedCommand parse(String input) throws Fozza.FozzaException {
         input = input.trim();

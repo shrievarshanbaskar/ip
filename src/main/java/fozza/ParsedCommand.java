@@ -1,11 +1,19 @@
 package fozza;
 
+/**
+ * Represents a parsed user command and its associated arguments.
+ */
+
 public class ParsedCommand {
 
     public CommandType type;
     public String a;
     public String b;
     public String c;
+
+    /**
+     * Creates a ParsedCommand with the given command type and arguments.
+     */
 
     public ParsedCommand(CommandType type) {
         this.type = type;
@@ -29,7 +37,10 @@ public class ParsedCommand {
         this.c = c;
     }
 
-    // ===== getters for JUnit =====
+    /**
+     * Returns the command type of this parsed command.
+     */
+
     public CommandType getCommandType() {
         return type;
     }

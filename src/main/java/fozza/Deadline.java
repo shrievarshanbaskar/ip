@@ -3,6 +3,10 @@ package fozza;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that must be completed by a specific date.
+ */
+
 public class Deadline extends Task {
     private LocalDateTime by;
 
