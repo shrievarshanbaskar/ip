@@ -1,3 +1,5 @@
+package fozza;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -9,7 +11,7 @@ public class Ui {
 
     public void showWelcome() {
         showLine();
-        System.out.println("Hello! I'm Fozza");
+        System.out.println("Hello! I'm fozza.Fozza");
         System.out.println("What can I do for you?\n");
         showLine();
     }

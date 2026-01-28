@@ -1,3 +1,5 @@
+package fozza;
+
 import java.io.IOException;
 
 public class Fozza {
@@ -108,5 +110,11 @@ public class Fozza {
 
     public static void main(String[] args) {
         new Fozza().run();
+    }
+
+    public static class FozzaException extends Exception {
+        public FozzaException(String message) {
+            super(message);
+        }
     }
 }

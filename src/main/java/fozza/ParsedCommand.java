@@ -1,3 +1,5 @@
+package fozza;
+
 public class ParsedCommand {
     public final CommandType type;
     public final String a;

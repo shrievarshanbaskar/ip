@@ -1,6 +1,8 @@
+package fozza;
+
 public class Parser {
 
-    public static ParsedCommand parse(String input) throws FozzaException {
+    public static ParsedCommand parse(String input) throws Fozza.FozzaException {
         input = input.trim();
 
         if (input.equals("bye")) {
@@ -17,7 +19,7 @@ public class Parser {
         }
 
         if (input.equals("todo") || (input.length() <= 5 && input.startsWith("todo"))) {
-            throw new FozzaException("The description of a todo cannot be empty.");
+            throw new Fozza.FozzaException("The description of a todo cannot be empty.");
         }
 
         if (input.startsWith("todo ")) {
@@ -27,7 +29,7 @@ public class Parser {
 
         if (input.startsWith("deadline ")) {
             if (!input.contains(" /by ")) {
-                throw new FozzaException("A deadline must have a /by.");
+                throw new Fozza.FozzaException("A deadline must have a /by.");
             }
             String[] parts = input.substring(9).split(" /by ");
             return new ParsedCommand(CommandType.DEADLINE, parts[0], parts[1], null);
@@ -35,13 +37,13 @@ public class Parser {
 
         if (input.startsWith("event ")) {
             if (!input.contains(" /from ") || !input.contains(" /to ")) {
-                throw new FozzaException("An event must have /from and /to.");
+                throw new Fozza.FozzaException("An event must have /from and /to.");
             }
             String[] first = input.substring(6).split(" /from ");
             String[] second = first[1].split(" /to ");
             return new ParsedCommand(CommandType.EVENT, first[0], second[0], second[1]);
         }
 
-        throw new FozzaException("I'm sorry, but I don't know what that means.");
+        throw new Fozza.FozzaException("I'm sorry, but I don't know what that means.");
     }
 }

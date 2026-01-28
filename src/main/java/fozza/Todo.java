@@ -1,3 +1,5 @@
+package fozza;
+
 public class Todo extends Task {
 
     public Todo(String name, boolean status) {
