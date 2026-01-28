@@ -3,6 +3,10 @@ package fozza;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import fozza.FozzaException;
+import fozza.CommandType;
+import fozza.ParsedCommand;
+
 public class ParserTest {
 
     @Test
@@ -25,9 +29,8 @@ public class ParserTest {
     @Test
     public void parse_deadline_missingBy_throwsException() {
         assertThrows(
-                Fozza.FozzaException.class,
+                FozzaException.class,
                 () -> Parser.parse("deadline return book")
         );
     }
-
 }
