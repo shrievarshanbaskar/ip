@@ -1,11 +1,12 @@
-public class Task {
-    private String name;
-    private boolean status;
+public abstract class Task {
+    protected String name;
+    protected boolean status;
 
     public Task(String name, boolean status) {
         this.name = name;
         this.status = status;
     }
+    public abstract String toFileString();
 
     public boolean getStatus() {
         return this.status;

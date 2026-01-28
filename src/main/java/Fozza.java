@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class Fozza {
     public static void main(String[] args) {
@@ -10,7 +11,14 @@ public class Fozza {
         System.out.println("-------------------------------------------------");
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> list = new ArrayList<>();
+        Storage storage = new Storage();
+        ArrayList<Task> list;
+
+        try {
+            list = storage.load();
+        } catch (Exception e) {
+            list = new ArrayList<>();
+        }
 
         while (true) {
             String input = sc.nextLine();
@@ -22,7 +30,7 @@ public class Fozza {
                     break;
                 }
 
-                else if (input.equals("todo") || input.length() <= 5 && input.startsWith("todo")) {
+                else if (input.equals("todo") || (input.length() <= 5 && input.startsWith("todo"))) {
                     throw new FozzaException("The description of a todo cannot be empty.");
                 }
 
@@ -30,6 +38,7 @@ public class Fozza {
                     String name = input.substring(5);
                     Task task = new Todo(name, false);
                     list.add(task);
+                    storage.save(list);
 
                     System.out.println("-------------------------------------------------");
                     System.out.println("Got it. I've added this task:");
@@ -46,6 +55,7 @@ public class Fozza {
                     String[] parts = input.substring(9).split(" /by ");
                     Task task = new Deadline(parts[0], false, parts[1]);
                     list.add(task);
+                    storage.save(list);
 
                     System.out.println("-------------------------------------------------");
                     System.out.println("Got it. I've added this task:");
@@ -64,6 +74,7 @@ public class Fozza {
 
                     Task task = new Event(first[0], false, second[0], second[1]);
                     list.add(task);
+                    storage.save(list);
 
                     System.out.println("-------------------------------------------------");
                     System.out.println("Got it. I've added this task:");
@@ -80,6 +91,7 @@ public class Fozza {
                     }
                     System.out.println("------------------------------------------------");
                 }
+
                 else if (input.startsWith("delete ")) {
                     int index = Integer.parseInt(input.substring(7)) - 1;
 
@@ -88,6 +100,7 @@ public class Fozza {
                     }
 
                     Task removed = list.remove(index);
+                    storage.save(list);
 
                     System.out.println("-------------------------------------------------");
                     System.out.println("Noted. I've removed this task:");
@@ -96,7 +109,6 @@ public class Fozza {
                     System.out.println("-------------------------------------------------");
                 }
 
-
                 else {
                     throw new FozzaException("I'm sorry, but I don't know what that means.");
                 }
@@ -104,6 +116,10 @@ public class Fozza {
             } catch (FozzaException e) {
                 System.out.println("-------------------------------------------------");
                 System.out.println("OOPS!! " + e.getMessage());
+                System.out.println("-------------------------------------------------");
+            } catch (IOException e) {
+                System.out.println("-------------------------------------------------");
+                System.out.println("OOPS!! I had trouble saving your tasks.");
                 System.out.println("-------------------------------------------------");
             }
         }
