@@ -1,129 +1,112 @@
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.io.IOException;
 
 public class Fozza {
-    public static void main(String[] args) {
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Hello! I'm Fozza");
-        System.out.println("What can I do for you?\n");
-        System.out.println("-------------------------------------------------");
+    public Fozza() {
+        this.ui = new Ui();
+        this.storage = new Storage();
 
-        Scanner sc = new Scanner(System.in);
-        Storage storage = new Storage();
-        ArrayList<Task> list;
-
+        TaskList loaded;
         try {
-            list = storage.load();
+            loaded = new TaskList(storage.load());
         } catch (Exception e) {
-            list = new ArrayList<>();
+            ui.showLoadingError();
+            loaded = new TaskList();
         }
+        this.tasks = loaded;
+    }
+
+    public void run() {
+        ui.showWelcome();
 
         while (true) {
-            String input = sc.nextLine();
+            String input = ui.readCommand();
 
             try {
-                if (input.equals("bye")) {
-                    System.out.println("Bye. Hope to see you again soon!");
-                    System.out.println("------------------------------------------------");
+                ParsedCommand cmd = Parser.parse(input);
+
+                if (cmd.type == CommandType.BYE) {
+                    ui.showBye();
                     break;
                 }
 
-                else if (input.equals("todo") || (input.length() <= 5 && input.startsWith("todo"))) {
-                    throw new FozzaException("The description of a todo cannot be empty.");
-                }
-
-                else if (input.startsWith("todo ")) {
-                    String name = input.substring(5);
-                    Task task = new Todo(name, false);
-                    list.add(task);
-                    storage.save(list);
-
-                    System.out.println("-------------------------------------------------");
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + task);
-                    System.out.println("Now you have " + list.size() + " tasks in the list.");
-                    System.out.println("-------------------------------------------------");
-                }
-
-                else if (input.startsWith("deadline ")) {
-                    if (!input.contains(" /by ")) {
-                        throw new FozzaException("A deadline must have a /by.");
-                    }
-
-                    String[] parts = input.substring(9).split(" /by ");
-                    Task task = new Deadline(parts[0], false, parts[1]);
-                    list.add(task);
-                    storage.save(list);
-
-                    System.out.println("-------------------------------------------------");
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + task);
-                    System.out.println("Now you have " + list.size() + " tasks in the list.");
-                    System.out.println("-------------------------------------------------");
-                }
-
-                else if (input.startsWith("event ")) {
-                    if (!input.contains(" /from ") || !input.contains(" /to ")) {
-                        throw new FozzaException("An event must have /from and /to.");
-                    }
-
-                    String[] first = input.substring(6).split(" /from ");
-                    String[] second = first[1].split(" /to ");
-
-                    Task task = new Event(first[0], false, second[0], second[1]);
-                    list.add(task);
-                    storage.save(list);
-
-                    System.out.println("-------------------------------------------------");
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + task);
-                    System.out.println("Now you have " + list.size() + " tasks in the list.");
-                    System.out.println("-------------------------------------------------");
-                }
-
-                else if (input.equals("list")) {
+                if (cmd.type == CommandType.LIST) {
                     System.out.println("------------------------------------------------");
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < list.size(); i++) {
-                        System.out.println((i + 1) + ". " + list.get(i));
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + ". " + tasks.get(i));
                     }
                     System.out.println("------------------------------------------------");
+                    continue;
                 }
 
-                else if (input.startsWith("delete ")) {
-                    int index = Integer.parseInt(input.substring(7)) - 1;
-
-                    if (index < 0 || index >= list.size()) {
+                if (cmd.type == CommandType.DELETE) {
+                    int index = Integer.parseInt(cmd.a) - 1;
+                    if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
 
-                    Task removed = list.remove(index);
-                    storage.save(list);
+                    Task removed = tasks.remove(index);
+                    storage.save(tasks.getTasks());
 
-                    System.out.println("-------------------------------------------------");
+                    ui.showLine();
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + removed);
-                    System.out.println("Now you have " + list.size() + " tasks in the list.");
-                    System.out.println("-------------------------------------------------");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showLine();
+                    continue;
                 }
 
-                else {
-                    throw new FozzaException("I'm sorry, but I don't know what that means.");
+                if (cmd.type == CommandType.TODO) {
+                    Task task = new Todo(cmd.a, false);
+                    tasks.add(task);
+                    storage.save(tasks.getTasks());
+
+                    ui.showLine();
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + task);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showLine();
+                    continue;
+                }
+
+                if (cmd.type == CommandType.DEADLINE) {
+                    Task task = new Deadline(cmd.a, false, cmd.b);
+                    tasks.add(task);
+                    storage.save(tasks.getTasks());
+
+                    ui.showLine();
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + task);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showLine();
+                    continue;
+                }
+
+                if (cmd.type == CommandType.EVENT) {
+                    Task task = new Event(cmd.a, false, cmd.b, cmd.c);
+                    tasks.add(task);
+                    storage.save(tasks.getTasks());
+
+                    ui.showLine();
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + task);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showLine();
                 }
 
             } catch (FozzaException e) {
-                System.out.println("-------------------------------------------------");
-                System.out.println("OOPS!! " + e.getMessage());
-                System.out.println("-------------------------------------------------");
+                ui.showError(e.getMessage());
             } catch (IOException e) {
-                System.out.println("-------------------------------------------------");
-                System.out.println("OOPS!! I had trouble saving your tasks.");
-                System.out.println("-------------------------------------------------");
+                ui.showSaveError();
             }
         }
+    }
 
-        sc.close();
+    public static void main(String[] args) {
+        new Fozza().run();
     }
 }
