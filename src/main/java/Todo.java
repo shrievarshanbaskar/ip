@@ -13,6 +13,4 @@ public class Todo extends Task {
     public String toFileString() {
         return "T | " + (status ? "1" : "0") + " | " + name;
     }
-
-
 }
