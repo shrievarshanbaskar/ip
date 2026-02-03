@@ -3,33 +3,45 @@ package fozza;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Represents a task that must be completed by a specific date.
- */
-
 public class Deadline extends Task {
-    private LocalDateTime by;
+    private LocalDateTime byDate;
+    private String byText;
 
-    private static final DateTimeFormatter INPUT_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter OUTPUT_FORMAT =
+    private static final DateTimeFormatter INPUT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd[ HH:mm]");
+    private static final DateTimeFormatter OUTPUT =
             DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a");
 
     public Deadline(String name, boolean status, String by) {
         super(name, status);
-        this.by = LocalDateTime.parse(by, INPUT_FORMAT);
+        try {
+            this.byDate = LocalDateTime.parse(by + " 00:00", INPUT);
+            this.byText = null;
+        } catch (Exception e) {
+            this.byDate = null;
+            this.byText = by;
+        }
     }
 
     @Override
     public String toString() {
+        if (byDate != null) {
+            return "[D]" + super.toString()
+                    + " (by: " + byDate.format(OUTPUT) + ")";
+        }
         return "[D]" + super.toString()
-                + " (by: " + by.format(OUTPUT_FORMAT) + ")";
+                + " (by: " + byText + ")";
     }
 
     @Override
     public String toFileString() {
+        if (byDate != null) {
+            return "D | " + (status ? "1" : "0")
+                    + " | " + name
+                    + " | " + byDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        }
         return "D | " + (status ? "1" : "0")
                 + " | " + name
-                + " | " + by.format(INPUT_FORMAT);
+                + " | " + byText;
     }
 }

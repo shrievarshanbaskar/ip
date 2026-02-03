@@ -1,8 +1,6 @@
 package fozza;
 
-import fozza.FozzaException;
 import java.io.IOException;
-
 
 /**
  * Main entry point of the Fozza chatbot application.
@@ -29,7 +27,6 @@ public class Fozza {
 
     /**
      * Runs the main command-processing loop of the chatbot.
-     * Reads user input, parses commands, and executes actions.
      */
     public void run() {
         ui.showWelcome();
@@ -46,31 +43,59 @@ public class Fozza {
                 }
 
                 if (cmd.type == CommandType.LIST) {
-                    System.out.println("------------------------------------------------");
+                    ui.showLine();
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
                         System.out.println((i + 1) + ". " + tasks.get(i));
                     }
-                    System.out.println("------------------------------------------------");
+                    ui.showLine();
                     continue;
                 }
 
-                /* ===================== FIND ===================== */
                 if (cmd.type == CommandType.FIND) {
                     ui.showLine();
                     System.out.println("Here are the matching tasks in your list:");
-
                     for (int i = 0; i < tasks.size(); i++) {
                         Task task = tasks.get(i);
                         if (task.toString().contains(cmd.a)) {
                             System.out.println((i + 1) + ". " + task);
                         }
                     }
-
                     ui.showLine();
                     continue;
                 }
-                /* ================================================= */
+
+                if (cmd.type == CommandType.MARK) {
+                    int index = Integer.parseInt(cmd.a) - 1;
+                    if (index < 0 || index >= tasks.size()) {
+                        throw new FozzaException("That task number does not exist.");
+                    }
+
+                    tasks.get(index).setStatus(true);
+                    storage.save(tasks.getTasks());
+
+                    ui.showLine();
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println("  " + tasks.get(index));
+                    ui.showLine();
+                    continue;
+                }
+
+                if (cmd.type == CommandType.UNMARK) {
+                    int index = Integer.parseInt(cmd.a) - 1;
+                    if (index < 0 || index >= tasks.size()) {
+                        throw new FozzaException("That task number does not exist.");
+                    }
+
+                    tasks.get(index).setStatus(false);
+                    storage.save(tasks.getTasks());
+
+                    ui.showLine();
+                    System.out.println("OK, I've marked this task as not done yet:");
+                    System.out.println("  " + tasks.get(index));
+                    ui.showLine();
+                    continue;
+                }
 
                 if (cmd.type == CommandType.DELETE) {
                     int index = Integer.parseInt(cmd.a) - 1;

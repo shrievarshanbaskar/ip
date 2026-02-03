@@ -1,1 +1,6 @@
-D | 0 | return book | 2006-12-22 18:00
+T | 0 | climb
+T | 0 | fly
+T | 1 | jump
+T | 0 | jumping while
+T | 0 | jump over
+T | 0 | eat

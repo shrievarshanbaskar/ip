@@ -1,53 +1,44 @@
 package fozza;
 
-import fozza.FozzaException;
-
-
-/**
- * Parses raw user input strings into structured commands.
- */
 public class Parser {
 
-    /**
-     * Parses a user command string and returns a ParsedCommand.
-     *
-     * @param input Full user input line
-     * @return ParsedCommand representing the command
-     * @throws FozzaException if the command format is invalid
-     */
     public static ParsedCommand parse(String input) throws FozzaException {
         input = input.trim();
 
         if (input.equals("bye")) {
-            return new ParsedCommand(CommandType.BYE, null, null, null);
+            return new ParsedCommand(CommandType.BYE);
         }
 
         if (input.equals("list")) {
-            return new ParsedCommand(CommandType.LIST, null, null, null);
+            return new ParsedCommand(CommandType.LIST);
+        }
+
+        if (input.startsWith("mark ")) {
+            return new ParsedCommand(CommandType.MARK, input.substring(5).trim());
+        }
+
+        if (input.startsWith("unmark ")) {
+            return new ParsedCommand(CommandType.UNMARK, input.substring(7).trim());
         }
 
         if (input.startsWith("find ")) {
             String keyword = input.substring(5).trim();
-
             if (keyword.isEmpty()) {
                 throw new FozzaException("The find command needs a keyword.");
             }
-
-            return new ParsedCommand(CommandType.FIND, keyword, null, null);
+            return new ParsedCommand(CommandType.FIND, keyword);
         }
 
         if (input.startsWith("delete ")) {
-            String num = input.substring(7).trim();
-            return new ParsedCommand(CommandType.DELETE, num, null, null);
+            return new ParsedCommand(CommandType.DELETE, input.substring(7).trim());
         }
 
-        if (input.equals("todo") || (input.length() <= 5 && input.startsWith("todo"))) {
+        if (input.equals("todo") || input.equals("todo ")) {
             throw new FozzaException("The description of a todo cannot be empty.");
         }
 
         if (input.startsWith("todo ")) {
-            String name = input.substring(5);
-            return new ParsedCommand(CommandType.TODO, name, null, null);
+            return new ParsedCommand(CommandType.TODO, input.substring(5).trim());
         }
 
         if (input.startsWith("deadline ")) {
@@ -55,7 +46,9 @@ public class Parser {
                 throw new FozzaException("A deadline must have a /by.");
             }
             String[] parts = input.substring(9).split(" /by ");
-            return new ParsedCommand(CommandType.DEADLINE, parts[0], parts[1], null);
+            return new ParsedCommand(CommandType.DEADLINE,
+                    parts[0].trim(),
+                    parts[1].trim());
         }
 
         if (input.startsWith("event ")) {
@@ -64,7 +57,10 @@ public class Parser {
             }
             String[] first = input.substring(6).split(" /from ");
             String[] second = first[1].split(" /to ");
-            return new ParsedCommand(CommandType.EVENT, first[0], second[0], second[1]);
+            return new ParsedCommand(CommandType.EVENT,
+                    first[0].trim(),
+                    second[0].trim(),
+                    second[1].trim());
         }
 
         throw new FozzaException("I'm sorry, but I don't know what that means.");

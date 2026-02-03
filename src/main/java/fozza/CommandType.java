@@ -1,4 +1,5 @@
 package fozza;
+
 public enum CommandType {
     BYE,
     LIST,
@@ -6,5 +7,7 @@ public enum CommandType {
     DEADLINE,
     EVENT,
     DELETE,
-    FIND
+    FIND,
+    MARK,
+    UNMARK
 }
