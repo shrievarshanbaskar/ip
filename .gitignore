@@ -21,3 +21,4 @@ bin/
 # Text UI test outputs
 /text-ui-test/ACTUAL.TXT
 /text-ui-test/EXPECTED-UNIX.TXT
+.vscode/
