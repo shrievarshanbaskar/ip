@@ -51,16 +51,29 @@ public class Storage {
         try {
             String[] parts = line.split(" \\| ");
 
+            // ASSERTION 1: every stored task must have at least 3 components
+            assert parts.length >= 3
+                    : "Stored task line must have at least 3 parts";
+
             String type = parts[0];
             boolean isDone = parts[1].equals("1");
 
             switch (type) {
                 case "T":
                     return new Todo(parts[2], isDone);
+
                 case "D":
+                    // ASSERTION 2: Deadline must have exactly 4 parts
+                    assert parts.length == 4
+                            : "Deadline line must have 4 parts";
                     return new Deadline(parts[2], isDone, parts[3]);
+
                 case "E":
+                    // ASSERTION 3: Event must have exactly 5 parts
+                    assert parts.length == 5
+                            : "Event line must have 5 parts";
                     return new Event(parts[2], isDone, parts[3], parts[4]);
+
                 default:
                     throw new IllegalArgumentException();
             }
