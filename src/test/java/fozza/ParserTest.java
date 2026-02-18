@@ -14,7 +14,7 @@ public class ParserTest {
         ParsedCommand c = Parser.parse("todo read book");
 
         assertEquals(CommandType.TODO, c.getCommandType());
-        assertEquals("read book", c.getA());
+        assertEquals("read book", c.getArg1());
     }
 
     @Test
@@ -22,8 +22,8 @@ public class ParserTest {
         ParsedCommand c = Parser.parse("deadline return book /by 2019-12-02");
 
         assertEquals(CommandType.DEADLINE, c.getCommandType());
-        assertEquals("return book", c.getA());
-        assertEquals("2019-12-02", c.getB());
+        assertEquals("return book", c.getArg1());
+        assertEquals("2019-12-02", c.getArg2());
     }
 
     @Test
