@@ -40,8 +40,8 @@ public class Storage {
         Files.createDirectories(filePath.getParent());
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-            for (Task t : tasks) {
-                writer.write(t.toFileString());
+            for (Task task : tasks) {
+                writer.write(task.toFileString());
                 writer.newLine();
             }
         }
@@ -49,34 +49,44 @@ public class Storage {
 
     private Task parseTask(String line) {
         try {
-            String[] parts = line.split(" \\| ");
+            // Split safely by pipe
+            String[] parts = line.split("\\|");
 
             // ASSERTION 1: every stored task must have at least 3 components
             assert parts.length >= 3
                     : "Stored task line must have at least 3 parts";
 
-            String type = parts[0];
-            boolean isDone = parts[1].equals("1");
+            String type = parts[0].trim();
+            boolean isDone = parts[1].trim().equals("1");
+            String description = parts[2].trim();
 
             switch (type) {
                 case "T":
-                    return new Todo(parts[2], isDone);
+                    return new Todo(description, isDone);
 
                 case "D":
                     // ASSERTION 2: Deadline must have exactly 4 parts
                     assert parts.length == 4
                             : "Deadline line must have 4 parts";
-                    return new Deadline(parts[2], isDone, parts[3]);
+                    return new Deadline(description, isDone, parts[3].trim());
 
                 case "E":
                     // ASSERTION 3: Event must have exactly 5 parts
                     assert parts.length == 5
                             : "Event line must have 5 parts";
-                    return new Event(parts[2], isDone, parts[3], parts[4]);
+                    return new Event(description, isDone,
+                            parts[3].trim(), parts[4].trim());
+
+                case "N":
+                    // ASSERTION 4: Note must have exactly 3 parts
+                    assert parts.length == 3
+                            : "Note line must have 3 parts";
+                    return new Note(description, isDone);
 
                 default:
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Unknown task type");
             }
+
         } catch (Exception e) {
             throw new IllegalArgumentException("Corrupted data file");
         }

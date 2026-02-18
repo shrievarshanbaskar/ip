@@ -59,12 +59,9 @@ public class Fozza {
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
-
                 tasks.get(index).setStatus(true);
                 storage.save(tasks.getTasks());
-
-                return "Nice! I've marked this task as done:\n  "
-                        + tasks.get(index);
+                return "Nice! I've marked this task as done:\n  " + tasks.get(index);
             }
 
             if (cmd.getCommandType() == CommandType.UNMARK) {
@@ -72,12 +69,9 @@ public class Fozza {
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
-
                 tasks.get(index).setStatus(false);
                 storage.save(tasks.getTasks());
-
-                return "OK, I've marked this task as not done yet:\n  "
-                        + tasks.get(index);
+                return "OK, I've marked this task as not done yet:\n  " + tasks.get(index);
             }
 
             if (cmd.getCommandType() == CommandType.DELETE) {
@@ -85,10 +79,8 @@ public class Fozza {
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
-
                 Task removed = tasks.remove(index);
                 storage.save(tasks.getTasks());
-
                 return "Noted. I've removed this task:\n  "
                         + removed
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -98,8 +90,17 @@ public class Fozza {
                 Task task = new Todo(cmd.getArg1(), false);
                 tasks.add(task);
                 storage.save(tasks.getTasks());
-
                 return "Got it. I've added this task:\n  "
+                        + task
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            }
+
+            // 🔵 NOTE SUPPORT
+            if (cmd.getCommandType() == CommandType.NOTE) {
+                Task task = new Note(cmd.getArg1(), false);
+                tasks.add(task);
+                storage.save(tasks.getTasks());
+                return "Got it. I've added this note:\n  "
                         + task
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
             }
@@ -108,7 +109,6 @@ public class Fozza {
                 Task task = new Deadline(cmd.getArg1(), false, cmd.getArg2());
                 tasks.add(task);
                 storage.save(tasks.getTasks());
-
                 return "Got it. I've added this task:\n  "
                         + task
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -119,7 +119,6 @@ public class Fozza {
                         cmd.getArg2(), cmd.getArg3());
                 tasks.add(task);
                 storage.save(tasks.getTasks());
-
                 return "Got it. I've added this task:\n  "
                         + task
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -178,10 +177,8 @@ public class Fozza {
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
-
                     tasks.get(index).setStatus(true);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("  " + tasks.get(index));
@@ -194,10 +191,8 @@ public class Fozza {
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
-
                     tasks.get(index).setStatus(false);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tasks.get(index));
@@ -210,10 +205,8 @@ public class Fozza {
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
-
                     Task removed = tasks.remove(index);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + removed);
@@ -226,9 +219,21 @@ public class Fozza {
                     Task task = new Todo(cmd.getArg1(), false);
                     tasks.add(task);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + task);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showLine();
+                    continue;
+                }
+
+                // 🔵 NOTE SUPPORT
+                if (cmd.getCommandType() == CommandType.NOTE) {
+                    Task task = new Note(cmd.getArg1(), false);
+                    tasks.add(task);
+                    storage.save(tasks.getTasks());
+                    ui.showLine();
+                    System.out.println("Got it. I've added this note:");
                     System.out.println("  " + task);
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     ui.showLine();
@@ -239,7 +244,6 @@ public class Fozza {
                     Task task = new Deadline(cmd.getArg1(), false, cmd.getArg2());
                     tasks.add(task);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task);
@@ -253,7 +257,6 @@ public class Fozza {
                             cmd.getArg2(), cmd.getArg3());
                     tasks.add(task);
                     storage.save(tasks.getTasks());
-
                     ui.showLine();
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task);
