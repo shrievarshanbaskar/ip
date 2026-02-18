@@ -46,9 +46,14 @@ public class Parser {
                 throw new FozzaException("A deadline must have a /by.");
             }
             String[] parts = input.substring(9).split(" /by ");
+
+            assert parts.length == 2
+                    : "Deadline command must split into 2 parts";
+
             return new ParsedCommand(CommandType.DEADLINE,
                     parts[0].trim(),
                     parts[1].trim());
+
         }
 
         if (input.startsWith("event ")) {
@@ -56,11 +61,20 @@ public class Parser {
                 throw new FozzaException("An event must have /from and /to.");
             }
             String[] first = input.substring(6).split(" /from ");
+
+            assert first.length == 2
+                    : "Event must contain /from";
+
             String[] second = first[1].split(" /to ");
+
+            assert second.length == 2
+                    : "Event must contain /to";
+
             return new ParsedCommand(CommandType.EVENT,
                     first[0].trim(),
                     second[0].trim(),
                     second[1].trim());
+
         }
 
         throw new FozzaException("I'm sorry, but I don't know what that means.");
