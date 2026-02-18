@@ -41,6 +41,15 @@ public class Parser {
             return new ParsedCommand(CommandType.TODO, input.substring(5).trim());
         }
 
+        // 🔵 NEW NOTE COMMAND
+        if (input.startsWith("note ")) {
+            String content = input.substring(5).trim();
+            if (content.isEmpty()) {
+                throw new FozzaException("The description of a note cannot be empty.");
+            }
+            return new ParsedCommand(CommandType.NOTE, content);
+        }
+
         if (input.startsWith("deadline ")) {
             if (!input.contains(" /by ")) {
                 throw new FozzaException("A deadline must have a /by.");
@@ -53,13 +62,13 @@ public class Parser {
             return new ParsedCommand(CommandType.DEADLINE,
                     parts[0].trim(),
                     parts[1].trim());
-
         }
 
         if (input.startsWith("event ")) {
             if (!input.contains(" /from ") || !input.contains(" /to ")) {
                 throw new FozzaException("An event must have /from and /to.");
             }
+
             String[] first = input.substring(6).split(" /from ");
 
             assert first.length == 2
@@ -74,7 +83,6 @@ public class Parser {
                     first[0].trim(),
                     second[0].trim(),
                     second[1].trim());
-
         }
 
         throw new FozzaException("I'm sorry, but I don't know what that means.");
