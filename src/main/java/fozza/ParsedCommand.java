@@ -3,57 +3,60 @@ package fozza;
 /**
  * Represents a parsed user command and its associated arguments.
  */
-
 public class ParsedCommand {
 
-    public CommandType type;
-    public String a;
-    public String b;
-    public String c;
+    private CommandType commandType;
+    private String arg1;
+    private String arg2;
+    private String arg3;
 
     /**
-     * Creates a ParsedCommand with the given command type and arguments.
+     * Creates a ParsedCommand with only a command type.
      */
-
-    public ParsedCommand(CommandType type) {
-        this.type = type;
-    }
-
-    public ParsedCommand(CommandType type, String a) {
-        this.type = type;
-        this.a = a;
-    }
-
-    public ParsedCommand(CommandType type, String a, String b) {
-        this.type = type;
-        this.a = a;
-        this.b = b;
-    }
-
-    public ParsedCommand(CommandType type, String a, String b, String c) {
-        this.type = type;
-        this.a = a;
-        this.b = b;
-        this.c = c;
+    public ParsedCommand(CommandType commandType) {
+        this.commandType = commandType;
     }
 
     /**
-     * Returns the command type of this parsed command.
+     * Creates a ParsedCommand with one argument.
      */
+    public ParsedCommand(CommandType commandType, String arg1) {
+        this.commandType = commandType;
+        this.arg1 = arg1;
+    }
+
+    /**
+     * Creates a ParsedCommand with two arguments.
+     */
+    public ParsedCommand(CommandType commandType, String arg1, String arg2) {
+        this.commandType = commandType;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+    }
+
+    /**
+     * Creates a ParsedCommand with three arguments.
+     */
+    public ParsedCommand(CommandType commandType, String arg1, String arg2, String arg3) {
+        this.commandType = commandType;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+        this.arg3 = arg3;
+    }
 
     public CommandType getCommandType() {
-        return type;
+        return commandType;
     }
 
-    public String getA() {
-        return a;
+    public String getArg1() {
+        return arg1;
     }
 
-    public String getB() {
-        return b;
+    public String getArg2() {
+        return arg2;
     }
 
-    public String getC() {
-        return c;
+    public String getArg3() {
+        return arg3;
     }
 }

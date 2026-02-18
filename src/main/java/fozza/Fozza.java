@@ -29,13 +29,11 @@ public class Fozza {
         try {
             ParsedCommand cmd = Parser.parse(input);
 
-            // BYE
-            if (cmd.type == CommandType.BYE) {
+            if (cmd.getCommandType() == CommandType.BYE) {
                 return "Bye. Hope to see you again soon!";
             }
 
-            // LIST
-            if (cmd.type == CommandType.LIST) {
+            if (cmd.getCommandType() == CommandType.LIST) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Here are the tasks in your list:\n");
                 for (int i = 0; i < tasks.size(); i++) {
@@ -44,22 +42,20 @@ public class Fozza {
                 return sb.toString().trim();
             }
 
-            // FIND
-            if (cmd.type == CommandType.FIND) {
+            if (cmd.getCommandType() == CommandType.FIND) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Here are the matching tasks in your list:\n");
                 for (int i = 0; i < tasks.size(); i++) {
                     Task task = tasks.get(i);
-                    if (task.toString().contains(cmd.a)) {
+                    if (task.toString().contains(cmd.getArg1())) {
                         sb.append(i + 1).append(". ").append(task).append("\n");
                     }
                 }
                 return sb.toString().trim();
             }
 
-            // MARK
-            if (cmd.type == CommandType.MARK) {
-                int index = Integer.parseInt(cmd.a) - 1;
+            if (cmd.getCommandType() == CommandType.MARK) {
+                int index = Integer.parseInt(cmd.getArg1()) - 1;
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
@@ -71,9 +67,8 @@ public class Fozza {
                         + tasks.get(index);
             }
 
-            // UNMARK
-            if (cmd.type == CommandType.UNMARK) {
-                int index = Integer.parseInt(cmd.a) - 1;
+            if (cmd.getCommandType() == CommandType.UNMARK) {
+                int index = Integer.parseInt(cmd.getArg1()) - 1;
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
@@ -85,9 +80,8 @@ public class Fozza {
                         + tasks.get(index);
             }
 
-            // DELETE
-            if (cmd.type == CommandType.DELETE) {
-                int index = Integer.parseInt(cmd.a) - 1;
+            if (cmd.getCommandType() == CommandType.DELETE) {
+                int index = Integer.parseInt(cmd.getArg1()) - 1;
                 if (index < 0 || index >= tasks.size()) {
                     throw new FozzaException("That task number does not exist.");
                 }
@@ -100,9 +94,8 @@ public class Fozza {
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
             }
 
-            // TODO
-            if (cmd.type == CommandType.TODO) {
-                Task task = new Todo(cmd.a, false);
+            if (cmd.getCommandType() == CommandType.TODO) {
+                Task task = new Todo(cmd.getArg1(), false);
                 tasks.add(task);
                 storage.save(tasks.getTasks());
 
@@ -111,9 +104,8 @@ public class Fozza {
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
             }
 
-            // DEADLINE (preserves your date/text handling)
-            if (cmd.type == CommandType.DEADLINE) {
-                Task task = new Deadline(cmd.a, false, cmd.b);
+            if (cmd.getCommandType() == CommandType.DEADLINE) {
+                Task task = new Deadline(cmd.getArg1(), false, cmd.getArg2());
                 tasks.add(task);
                 storage.save(tasks.getTasks());
 
@@ -122,9 +114,9 @@ public class Fozza {
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
             }
 
-            // EVENT (preserves /from /to + formatting)
-            if (cmd.type == CommandType.EVENT) {
-                Task task = new Event(cmd.a, false, cmd.b, cmd.c);
+            if (cmd.getCommandType() == CommandType.EVENT) {
+                Task task = new Event(cmd.getArg1(), false,
+                        cmd.getArg2(), cmd.getArg3());
                 tasks.add(task);
                 storage.save(tasks.getTasks());
 
@@ -133,7 +125,6 @@ public class Fozza {
                         + "\nNow you have " + tasks.size() + " tasks in the list.";
             }
 
-            // SHOULD NEVER REACH HERE
             return "Command executed.";
 
         } catch (FozzaException e) {
@@ -145,11 +136,6 @@ public class Fozza {
         }
     }
 
-
-
-    /**
-     * Runs the main command-processing loop of the chatbot.
-     */
     public void run() {
         ui.showWelcome();
 
@@ -159,12 +145,12 @@ public class Fozza {
             try {
                 ParsedCommand cmd = Parser.parse(input);
 
-                if (cmd.type == CommandType.BYE) {
+                if (cmd.getCommandType() == CommandType.BYE) {
                     ui.showBye();
                     break;
                 }
 
-                if (cmd.type == CommandType.LIST) {
+                if (cmd.getCommandType() == CommandType.LIST) {
                     ui.showLine();
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
@@ -174,12 +160,12 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.FIND) {
+                if (cmd.getCommandType() == CommandType.FIND) {
                     ui.showLine();
                     System.out.println("Here are the matching tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
                         Task task = tasks.get(i);
-                        if (task.toString().contains(cmd.a)) {
+                        if (task.toString().contains(cmd.getArg1())) {
                             System.out.println((i + 1) + ". " + task);
                         }
                     }
@@ -187,8 +173,8 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.MARK) {
-                    int index = Integer.parseInt(cmd.a) - 1;
+                if (cmd.getCommandType() == CommandType.MARK) {
+                    int index = Integer.parseInt(cmd.getArg1()) - 1;
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
@@ -203,8 +189,8 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.UNMARK) {
-                    int index = Integer.parseInt(cmd.a) - 1;
+                if (cmd.getCommandType() == CommandType.UNMARK) {
+                    int index = Integer.parseInt(cmd.getArg1()) - 1;
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
@@ -219,8 +205,8 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.DELETE) {
-                    int index = Integer.parseInt(cmd.a) - 1;
+                if (cmd.getCommandType() == CommandType.DELETE) {
+                    int index = Integer.parseInt(cmd.getArg1()) - 1;
                     if (index < 0 || index >= tasks.size()) {
                         throw new FozzaException("That task number does not exist.");
                     }
@@ -236,8 +222,8 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.TODO) {
-                    Task task = new Todo(cmd.a, false);
+                if (cmd.getCommandType() == CommandType.TODO) {
+                    Task task = new Todo(cmd.getArg1(), false);
                     tasks.add(task);
                     storage.save(tasks.getTasks());
 
@@ -249,8 +235,8 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.DEADLINE) {
-                    Task task = new Deadline(cmd.a, false, cmd.b);
+                if (cmd.getCommandType() == CommandType.DEADLINE) {
+                    Task task = new Deadline(cmd.getArg1(), false, cmd.getArg2());
                     tasks.add(task);
                     storage.save(tasks.getTasks());
 
@@ -262,8 +248,9 @@ public class Fozza {
                     continue;
                 }
 
-                if (cmd.type == CommandType.EVENT) {
-                    Task task = new Event(cmd.a, false, cmd.b, cmd.c);
+                if (cmd.getCommandType() == CommandType.EVENT) {
+                    Task task = new Event(cmd.getArg1(), false,
+                            cmd.getArg2(), cmd.getArg3());
                     tasks.add(task);
                     storage.save(tasks.getTasks());
 
