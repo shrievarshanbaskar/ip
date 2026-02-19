@@ -1,9 +1,10 @@
 package fozza;
-/**
- * Abstract base class representing a task in the task list.
- */
 
+/**
+ * Represents a generic task.
+ */
 public abstract class Task {
+
     protected String name;
     protected boolean status;
 
@@ -11,24 +12,19 @@ public abstract class Task {
         this.name = name;
         this.status = status;
     }
-    public abstract String toFileString();
 
-    public boolean getStatus() {
-        return this.status;
+    public boolean isDone() {
+        return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    /**
-     * Returns the string representation of the task for display.
-     */
+    public abstract String toFileString();
+
     @Override
     public String toString() {
-        if (status) {
-            return "[X] " + name;
-        }
-        return "[ ] " + name;
+        return (status ? "[X] " : "[ ] ") + name;
     }
 }

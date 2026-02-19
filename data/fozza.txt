@@ -4,3 +4,8 @@ T | 1 | jump
 T | 0 | jumping while
 T | 0 | jump over
 T | 0 | eat
+T | 0 | fly over
+D | 0 | submit assignment | 2026-03-01 00:00
+E | 0 | team meeting | 2026-03-10 00:00 | 2026-03-10 00:00
+N | 0 | remember to refactor Parser class
+D | 0 | unclear date | tomorrow evening

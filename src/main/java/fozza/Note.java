@@ -1,5 +1,8 @@
 package fozza;
 
+/**
+ * Represents a note task.
+ */
 public class Note extends Task {
 
     public Note(String name, boolean status) {

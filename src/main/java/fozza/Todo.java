@@ -1,8 +1,8 @@
 package fozza;
-/**
- * Represents a simple todo task without dates.
- */
 
+/**
+ * Represents a todo task.
+ */
 public class Todo extends Task {
 
     public Todo(String name, boolean status) {

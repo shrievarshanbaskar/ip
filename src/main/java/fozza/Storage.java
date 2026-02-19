@@ -8,13 +8,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Handles reading from and writing to the data file.
+ */
 public class Storage {
+
     private final Path filePath;
 
+    // Initializes storage with default file path
     public Storage() {
         this.filePath = Paths.get("data", "fozza.txt");
     }
 
+    // Loads tasks from the data file
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -36,6 +42,7 @@ public class Storage {
         return tasks;
     }
 
+    // Saves all tasks to the data file
     public void save(ArrayList<Task> tasks) throws IOException {
         Files.createDirectories(filePath.getParent());
 
@@ -47,14 +54,14 @@ public class Storage {
         }
     }
 
+    // Converts a single line from file into a Task object
     private Task parseTask(String line) {
         try {
-            // Split safely by pipe
             String[] parts = line.split("\\|");
 
-            // ASSERTION 1: every stored task must have at least 3 components
-            assert parts.length >= 3
-                    : "Stored task line must have at least 3 parts";
+            if (parts.length < 3) {
+                throw new IllegalArgumentException();
+            }
 
             String type = parts[0].trim();
             boolean isDone = parts[1].trim().equals("1");
@@ -65,30 +72,40 @@ public class Storage {
                     return new Todo(description, isDone);
 
                 case "D":
-                    // ASSERTION 2: Deadline must have exactly 4 parts
-                    assert parts.length == 4
-                            : "Deadline line must have 4 parts";
-                    return new Deadline(description, isDone, parts[3].trim());
+                    if (parts.length != 4) {
+                        throw new IllegalArgumentException();
+                    }
+                    return new Deadline(
+                            description,
+                            isDone,
+                            parts[3].trim()
+                    );
 
                 case "E":
-                    // ASSERTION 3: Event must have exactly 5 parts
-                    assert parts.length == 5
-                            : "Event line must have 5 parts";
-                    return new Event(description, isDone,
-                            parts[3].trim(), parts[4].trim());
+                    if (parts.length != 5) {
+                        throw new IllegalArgumentException();
+                    }
+                    return new Event(
+                            description,
+                            isDone,
+                            parts[3].trim(),
+                            parts[4].trim()
+                    );
 
                 case "N":
-                    // ASSERTION 4: Note must have exactly 3 parts
-                    assert parts.length == 3
-                            : "Note line must have 3 parts";
+                    if (parts.length != 3) {
+                        throw new IllegalArgumentException();
+                    }
                     return new Note(description, isDone);
 
                 default:
-                    throw new IllegalArgumentException("Unknown task type");
+                    throw new IllegalArgumentException();
             }
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("Corrupted data file");
+            throw new IllegalArgumentException(
+                    "Corrupted data file."
+            );
         }
     }
 }
