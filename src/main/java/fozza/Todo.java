@@ -1,12 +1,12 @@
 package fozza;
 
 /**
- * Represents a todo task.
+ * Represents a simple todo task.
  */
 public class Todo extends Task {
 
-    public Todo(String name, boolean status) {
-        super(name, status);
+    public Todo(String name, boolean isDone) {
+        super(name, isDone);
     }
 
     @Override
@@ -16,6 +16,6 @@ public class Todo extends Task {
 
     @Override
     public String toFileString() {
-        return "T | " + (status ? "1" : "0") + " | " + name;
+        return "T | " + (isDone ? "1" : "0") + " | " + name;
     }
 }

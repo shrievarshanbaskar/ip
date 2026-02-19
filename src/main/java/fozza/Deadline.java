@@ -8,26 +8,20 @@ import java.time.format.DateTimeFormatter;
  */
 public class Deadline extends Task {
 
-    private LocalDateTime byDate;
-    private String byText;
-
     private static final DateTimeFormatter INPUT_FORMAT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd[ HH:mm]");
-
     private static final DateTimeFormatter OUTPUT_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a");
 
-    private static final DateTimeFormatter FILE_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private LocalDateTime byDate;
+    private String byText;
 
-    public Deadline(String name, boolean status, String by) {
-        super(name, status);
-        parseDate(by);
-    }
+    public Deadline(String name, boolean isDone, String by) {
+        super(name, isDone);
 
-    private void parseDate(String by) {
         try {
             this.byDate = LocalDateTime.parse(by + " 00:00", INPUT_FORMAT);
+            this.byText = null;
         } catch (Exception e) {
             this.byDate = null;
             this.byText = by;
@@ -47,11 +41,11 @@ public class Deadline extends Task {
     @Override
     public String toFileString() {
         if (byDate != null) {
-            return "D | " + (status ? "1" : "0")
+            return "D | " + (isDone ? "1" : "0")
                     + " | " + name
-                    + " | " + byDate.format(FILE_FORMAT);
+                    + " | " + byDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         }
-        return "D | " + (status ? "1" : "0")
+        return "D | " + (isDone ? "1" : "0")
                 + " | " + name
                 + " | " + byText;
     }

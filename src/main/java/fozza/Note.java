@@ -5,8 +5,8 @@ package fozza;
  */
 public class Note extends Task {
 
-    public Note(String name, boolean status) {
-        super(name, status);
+    public Note(String name, boolean isDone) {
+        super(name, isDone);
     }
 
     @Override
@@ -16,6 +16,6 @@ public class Note extends Task {
 
     @Override
     public String toFileString() {
-        return "N | " + (status ? "1" : "0") + " | " + name;
+        return "N | " + (isDone ? "1" : "0") + " | " + name;
     }
 }

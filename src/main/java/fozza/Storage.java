@@ -9,18 +9,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
- * Handles reading from and writing to the data file.
+ * Handles loading and saving tasks to persistent storage.
  */
 public class Storage {
 
     private final Path filePath;
 
-    // Initializes storage with default file path
+    // Creates storage pointing to data/fozza.txt
     public Storage() {
         this.filePath = Paths.get("data", "fozza.txt");
     }
 
-    // Loads tasks from the data file
+    // Loads tasks from file into memory
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class Storage {
         return tasks;
     }
 
-    // Saves all tasks to the data file
+    // Saves tasks to file
     public void save(ArrayList<Task> tasks) throws IOException {
         Files.createDirectories(filePath.getParent());
 
@@ -54,58 +54,41 @@ public class Storage {
         }
     }
 
-    // Converts a single line from file into a Task object
+    // Parses a single stored line into a Task object
     private Task parseTask(String line) {
-        try {
-            String[] parts = line.split("\\|");
 
-            if (parts.length < 3) {
-                throw new IllegalArgumentException();
-            }
+        String[] parts = line.split("\\|");
 
-            String type = parts[0].trim();
-            boolean isDone = parts[1].trim().equals("1");
-            String description = parts[2].trim();
+        if (parts.length < 3) {
+            throw new IllegalArgumentException("Corrupted data file.");
+        }
 
-            switch (type) {
-                case "T":
-                    return new Todo(description, isDone);
+        String type = parts[0].trim();
+        boolean isDone = parts[1].trim().equals("1");
+        String description = parts[2].trim();
 
-                case "D":
-                    if (parts.length != 4) {
-                        throw new IllegalArgumentException();
-                    }
-                    return new Deadline(
-                            description,
-                            isDone,
-                            parts[3].trim()
-                    );
+        switch (type) {
+            case "T":
+                return new Todo(description, isDone);
 
-                case "E":
-                    if (parts.length != 5) {
-                        throw new IllegalArgumentException();
-                    }
-                    return new Event(
-                            description,
-                            isDone,
-                            parts[3].trim(),
-                            parts[4].trim()
-                    );
+            case "D":
+                if (parts.length != 4) {
+                    throw new IllegalArgumentException("Corrupted deadline entry.");
+                }
+                return new Deadline(description, isDone, parts[3].trim());
 
-                case "N":
-                    if (parts.length != 3) {
-                        throw new IllegalArgumentException();
-                    }
-                    return new Note(description, isDone);
+            case "E":
+                if (parts.length != 5) {
+                    throw new IllegalArgumentException("Corrupted event entry.");
+                }
+                return new Event(description, isDone,
+                        parts[3].trim(), parts[4].trim());
 
-                default:
-                    throw new IllegalArgumentException();
-            }
+            case "N":
+                return new Note(description, isDone);
 
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    "Corrupted data file."
-            );
+            default:
+                throw new IllegalArgumentException("Unknown task type in file.");
         }
     }
 }

@@ -1,30 +1,35 @@
 package fozza;
 
 /**
- * Represents a generic task.
+ * Abstract base class representing a task.
  */
 public abstract class Task {
 
     protected String name;
-    protected boolean status;
+    protected boolean isDone;
 
-    public Task(String name, boolean status) {
+    // Creates a task with description and completion state
+    public Task(String name, boolean isDone) {
         this.name = name;
-        this.status = status;
+        this.isDone = isDone;
     }
 
+    // Returns whether the task is completed
     public boolean isDone() {
-        return status;
+        return isDone;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    // Sets the completion state of the task
+    public void setStatus(boolean done) {
+        this.isDone = done;
     }
 
-    public abstract String toFileString();
-
+    // Returns formatted display string
     @Override
     public String toString() {
-        return (status ? "[X] " : "[ ] ") + name;
+        return (isDone ? "[X] " : "[ ] ") + name;
     }
+
+    // Returns formatted string for file storage
+    public abstract String toFileString();
 }
