@@ -2,7 +2,7 @@ Fozza User Guide
 
 Fozza is a task management chatbot with a JavaFX graphical user interface (GUI).
 It allows users to manage tasks efficiently using simple command-based inputs.
-==============================================================================================
+==========================================================================================
 Overview:
 
 #Fozza supports:
@@ -16,7 +16,7 @@ Persistent storage (tasks are saved automatically)
 
 All commands are entered in the input field at the bottom of the GUI.
 
-==================================================================================================
+==========================================================================================
 
 ##Adding Tasks-
 
@@ -175,4 +175,4 @@ Bye. Hope to see you again soon!
 
 ##Data Storage -  Fozza automatically saves tasks to a local file.
 Tasks will be restored when the application is restarted.
-===================================================================================================
+==========================================================================================
