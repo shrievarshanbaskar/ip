@@ -16,6 +16,7 @@ public class Ui {
         System.out.println("-------------------------------------------------");
     }
 
+
     /**
      * Displays welcome message.
      */
@@ -54,6 +55,7 @@ public class Ui {
         showLine();
     }
 
+
     /**
      * Displays save error message.
      */
@@ -62,6 +64,7 @@ public class Ui {
         System.out.println("OOPS!! I had trouble saving your tasks.");
         showLine();
     }
+
 
     /**
      * Displays loading error message.
