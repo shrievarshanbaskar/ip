@@ -14,10 +14,12 @@ public class Parser {
             return new ParsedCommand(CommandType.BYE);
         }
 
+
         // List all tasks
         if (input.equals("list")) {
             return new ParsedCommand(CommandType.LIST);
         }
+
 
         // Mark task as done
         if (input.startsWith("mark ")) {
@@ -45,6 +47,7 @@ public class Parser {
             }
             return new ParsedCommand(CommandType.FIND, keyword);
         }
+
 
         // Delete task
         if (input.startsWith("delete ")) {
@@ -79,6 +82,7 @@ public class Parser {
             }
             return new ParsedCommand(CommandType.NOTE, content);
         }
+
 
         // Add deadline task
         if (input.startsWith("deadline ")) {
