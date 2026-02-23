@@ -160,6 +160,7 @@ Now you have X tasks in the list.
 -----------------------------------------------------------------------------------------------
 
 
+
 ##Exiting the Application : 
 
 Closes Fozza.
@@ -173,6 +174,8 @@ Bye. Hope to see you again soon!
 -------------------------------------------------------------------------------------------------
 
 
+
 ##Data Storage -  Fozza automatically saves tasks to a local file.
 Tasks will be restored when the application is restarted.
+
 ==========================================================================================
