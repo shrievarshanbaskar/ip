@@ -1,6 +1,7 @@
 package fozza;
 
 import java.io.IOException;
+import javafx.application.Platform;
 
 /**
  * Core logic handler for the Fozza chatbot.
@@ -62,10 +63,16 @@ public class Fozza {
             case UNMARK:
                 return mark(cmd, false);
             case BYE:
-                return "Bye. Hope to see you again soon!";
+                return exit();
             default:
                 throw new FozzaException("Unknown command.");
         }
+    }
+
+    // Handles application exit
+    private String exit() {
+        Platform.exit();
+        return "Bye. Hope to see you again soon!";
     }
 
     // Adds a task to the list and saves it

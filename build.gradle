@@ -26,6 +26,9 @@ test {
 
 application {
     mainClass.set("fozza.Launcher")
+    applicationDefaultJvmArgs = [
+            "-Dprism.order=sw"
+    ]
 }
 
 shadowJar {
