@@ -17,7 +17,8 @@ public class Fozza {
         this.tasks = loadTasks();
     }
 
-    // Loads tasks from file or returns an empty list if loading fails
+
+    //Loads tasks from file or returns an empty list if loading fails
     private TaskList loadTasks() {
         try {
             return new TaskList(storage.load());
@@ -111,6 +112,7 @@ public class Fozza {
         }
         return "OK, I've marked this task as not done yet:\n  " + task;
     }
+
 
     // Converts user input into a zero-based index
     private int parseIndex(String value)
