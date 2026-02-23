@@ -70,6 +70,7 @@ public class Fozza {
         }
     }
 
+
     // Handles application exit
     private String exit() {
         Platform.exit();
